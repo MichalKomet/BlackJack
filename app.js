@@ -1,6 +1,6 @@
 // Blackjack
 
-const deck = {
+const DECK = {
     dwojka: 2,
     trojka: 3,
     czworka: 4,
@@ -17,6 +17,13 @@ const deck = {
 }
 let players = []
 let key
+
+const getKey = () => Object.keys(DECK)[
+    Math.floor(
+        Math.random() * Object.keys(DECK).length
+    )];
+
+
 class Game {
     constructor() {
         this.sum = 0
@@ -30,15 +37,15 @@ class Game {
 
     // Dobieranie kart (do udoskonalenia względem metody split)
     hit() {
-        key = Object.keys(deck)[Math.floor(Math.random()*Object.keys(deck).length)]
-        if(deck[key] === 11){
+        key = getKey()
+        if(DECK[key] === 11) {
             this.hasAs += 1
         }
-        this.sum += deck[key]
+        this.sum += DECK[key]
         this.hand.push(key)
         // this.sum = this.hand.reduce((sum, currentCard) => {
-        //     return sum + deck[currentCard]
-        //     if(deck[currentCard] === 11){
+        //     return sum + DECK[currentCard]
+        //     if(DECK[currentCard] === 11){
         //         this.hasAs += 1
         //     }
         // }, 0)
@@ -46,52 +53,57 @@ class Game {
         if(this.sum > 21 && this.hasAs > 0) {
             this.sum -= 10
             this.hasAs -= 1
-        } else if(this.sum > 21 && this.hasAs === 0){
+        } else if(this.sum > 21 && this.hasAs === 0) {
             this.lose = true
             this.isStand = true
             console.log(`${this.name} lose! Your score makes more than 21!`)
         }
     }
+
     // Rozdzielenie kart w ręcę (do zrobienia)
     split() {
-        if(this.hand[0]===this.hand[1]){
+        if(this.hand[0] === this.hand[1]) {
             this.secondHand = this.hand.pop()
             this.hit()
             this.hit()
         }
     }
+
     blackjack() {
-        if(deck[this.hand[0]]+deck[this.hand[1]]===21) {
+        if(DECK[this.hand[0]] + DECK[this.hand[1]] === 21) {
             console.log(`BlackJack! ${this.name} won!`)
             this.isStand = true
         }
     }
+
     stand() {
         this.isStand = true
     }
 }
+
 class Dealer extends Game {
     constructor(Dealer) {
         super(Dealer);
         console.log(`Dealer's first card is: ${this.hand[0]}`)
 
     }
+
     check() {
-        if(players.every(player => player.isStand === true)){
+        if(players.every(player => player.isStand === true)) {
             console.log(this.hand)
             this.blackjack()
-            while (this.sum < 16) {
+            while(this.sum < 16) {
                 this.hit()
             }
             console.log(this.hand)
             console.log(this.sum)
-            if (this.sum > 21) {
+            if(this.sum > 21) {
                 this.lose = true
                 console.log("Dealer's lose! Players win!")
             } else {
                 let playersInGame = players.filter(inGame => inGame.lose === false && this.sum <= inGame.sum)
                 // console.log(playersInGame)
-                if (playersInGame.length === 0) {
+                if(playersInGame.length === 0) {
                     console.log(`Dealer's win! Dealer's sum: ${this.sum}!`)
                 } else {
                     console.log(`Dealer's sum: ${this.sum}`)
@@ -104,6 +116,7 @@ class Dealer extends Game {
 
     }
 }
+
 class Player extends Game {
     constructor(name) {
         super(name);
@@ -116,7 +129,7 @@ class Player extends Game {
 function choose(choose) {
     let inGame = players.filter(player => player.isStand === false)
     inGame.forEach(el => {
-        switch (choose) {
+        switch(choose) {
             case "hit":
                 el.hit()
                 console.log(`${el.name} hits: ${key}. Total score is: ${el.sum}`)
@@ -134,6 +147,7 @@ function choose(choose) {
     })
     dealer.check()
 }
+
 function create(name) {
     return players.push(new Player(name))
 }
