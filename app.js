@@ -18,6 +18,7 @@ const DECK = {
 }
 let players = []
 let key
+let howManyPlayers
 
 const getKey = () => Object.keys(DECK)[
     Math.floor(
@@ -25,7 +26,7 @@ const getKey = () => Object.keys(DECK)[
     )];
 
 
-class Game {
+class GameMechanics {
     constructor() {
         this.sum = 0
         this.hasAs = 0
@@ -82,7 +83,7 @@ class Game {
     }
 }
 
-class Dealer extends Game {
+class Dealer extends GameMechanics {
     constructor(Dealer) {
         super(Dealer);
         console.log(`Dealer's first card is: ${this.hand[0]}`)
@@ -91,13 +92,12 @@ class Dealer extends Game {
 
     check() {
         if(players.every(player => player.isStand === true)) {
-            console.log(this.hand)
+            console.log("Dealer's hand: " + this.hand + "and his total score is: " + this.sum)
             this.blackjack()
             while(this.sum < 16) {
                 this.hit()
             }
-            console.log(this.hand)
-            console.log(this.sum)
+            console.log("Dealer's final hand: " + this.hand + " and his total score is: " + this.sum)
             if(this.sum > 21) {
                 this.lose = true
                 console.log("Dealer's lose! Players win!")
@@ -118,25 +118,42 @@ class Dealer extends Game {
     }
 }
 
-class Player extends Game {
+class Player extends GameMechanics {
     constructor(name) {
         super(name);
         this.name = name
-        console.log(`${this.name}'s hand: ${this.hand}. ${this.name}'s score is: ${this.sum}`)
-        this.blackjack()
+    }
+
+    display() {
+        return `${this.name}'s hand: ${this.hand}. ${this.name}'s score is: ${this.sum}`
     }
 }
 
+function prepare() {
+    howManyPlayers = prompt(`How many players will be in game? `)
+    howManyPlayers = parseInt(howManyPlayers)
+    for(let i = 0; i < howManyPlayers; i++) {
+        let name = prompt(`What is ${i + 1}'s player name? `)
+        create(name)
+    }
+    console.log("-------------------")
+}
+
 function play() {
+    players.forEach(el => {
+        console.log(el.display())
+        el.blackjack()
+        console.log("-------------------")
+    })
     while(players.some(player => player.isStand === false)) {
-        playRound()/*dynamic choose will be create in near future*/
+        playRound()
     }
 }
 
 function playRound() {
     let inGamePlayers = players.filter(player => player.isStand === false)
     inGamePlayers.forEach(el => {
-        let decision = prompt(`Your actual hand is: ${el.hand} and your score is: ${el.sum}. What is your choice ${el.name} wariacie? `)
+        let decision = prompt(`${el.name}! Your actual hand is: ${el.hand} and your score is: ${el.sum}. What is your choice ${el.name} wariacie? `)
         switch(decision) {
             case "hit":
                 el.hit()
@@ -152,6 +169,7 @@ function playRound() {
                 el.stand()
                 break
         }
+        console.log("-------------------")
     })
     dealer.check()
 }
@@ -160,15 +178,8 @@ function create(name) {
     return players.push(new Player(name))
 }
 
+prepare()
 const dealer = new Dealer("Dealer")
-
-create("Michal")
-create("John")
-create("Joanna")
-create("Ola")
-create("Jan")
-create("Florest")
-console.log("-------------------------------")
 play()
 
 
