@@ -92,7 +92,7 @@ class Dealer extends GameMechanics {
 
     check() {
         if(players.every(player => player.isStand === true)) {
-            console.log("Dealer's hand: " + this.hand + "and his total score is: " + this.sum)
+            console.log("Dealer's hand: " + this.hand + " and his total score is: " + this.sum)
             this.blackjack()
             while(this.sum < 16) {
                 this.hit()
