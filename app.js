@@ -1,4 +1,5 @@
 // Blackjack
+const prompt = require('prompt-sync')()
 
 const DECK = {
     dwojka: 2,
@@ -101,7 +102,7 @@ class Dealer extends Game {
                 this.lose = true
                 console.log("Dealer's lose! Players win!")
             } else {
-                let playersInGame = players.filter(inGame => inGame.lose === false && this.sum <= inGame.sum)
+                let playersInGame = players.filter(inGamePlayers => inGamePlayers.lose === false && this.sum <= inGamePlayers.sum)
                 // console.log(playersInGame)
                 if(playersInGame.length === 0) {
                     console.log(`Dealer's win! Dealer's sum: ${this.sum}!`)
@@ -126,10 +127,17 @@ class Player extends Game {
     }
 }
 
-function choose(choose) {
-    let inGame = players.filter(player => player.isStand === false)
-    inGame.forEach(el => {
-        switch(choose) {
+function play() {
+    while(players.some(player => player.isStand === false)) {
+        playRound()/*dynamic choose will be create in near future*/
+    }
+}
+
+function playRound() {
+    let inGamePlayers = players.filter(player => player.isStand === false)
+    inGamePlayers.forEach(el => {
+        let decision = prompt(`Your actual hand is: ${el.hand} and your score is: ${el.sum}. What is your choice ${el.name} wariacie? `)
+        switch(decision) {
             case "hit":
                 el.hit()
                 console.log(`${el.name} hits: ${key}. Total score is: ${el.sum}`)
@@ -161,8 +169,7 @@ create("Ola")
 create("Jan")
 create("Florest")
 console.log("-------------------------------")
-choose("hit")
-choose("stand")
+play()
 
 
 
