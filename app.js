@@ -35,7 +35,7 @@ class Game {
         this.hit()
     }
 
-    // Dobieranie kart (do udoskonalenia względem metody split)
+    // Hit the card (improve by split method)
     hit() {
         key = getKey()
         if(DECK[key] === 11) {
@@ -60,7 +60,7 @@ class Game {
         }
     }
 
-    // Rozdzielenie kart w ręcę (do zrobienia)
+    // Split cards on hand (to do)
     split() {
         if(this.hand[0] === this.hand[1]) {
             this.secondHand = this.hand.pop()
@@ -159,6 +159,7 @@ create("John")
 create("Joanna")
 create("Ola")
 create("Jan")
+create("Florest")
 console.log("-------------------------------")
 choose("hit")
 choose("stand")
