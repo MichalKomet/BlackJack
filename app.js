@@ -25,6 +25,7 @@ const getKey = () => Object.keys(DECK)[
         Math.random() * Object.keys(DECK).length
     )];
 
+let i = 10000
 
 class GameMechanics {
     constructor() {
@@ -33,12 +34,18 @@ class GameMechanics {
         this.isStand = false
         this.lose = false
         this.hand = []
-        this.hit()
-        this.hit()
+        if(i === 2) {
+            this.hit("dwojka")
+            this.hit("dwojka")
+        } else {
+            this.hit()
+            this.hit()
+        }
+        i += 1
     }
 
-    hit() {
-        key = getKey()
+    hit(defaultKey) {
+        key = defaultKey || getKey()
         if(DECK[key] === 11) {
             this.hasAs += 1
         }
@@ -64,7 +71,7 @@ class GameMechanics {
     // Split cards on hand (to do)
     split() {
         if(this.hand[0] === this.hand[1]) {
-            split(this.name, this.hand[1])
+            splitHandler(this)
             let card = this.hand.shift()
             if(DECK[card] === 11) {
                 this.hasAs -= 1
@@ -181,16 +188,17 @@ function create(name) {
     return players.push(new Player(name))
 }
 
-function split(name, card) {
-    const newHand = new Player(name + "'s new hand")
-    let firstCard = newHand.hand.shift()
-    newHand.sum -= DECK[firstCard]
+function splitHandler(oldPlayer) {
+    const newPlayer = new Player(oldPlayer.name + "'s new hand")
+    const oldPlayerId = players.indexOf(oldPlayer)
+    const firstCard = newPlayer.hand.shift()
+    newPlayer.sum -= DECK[firstCard]
     if(DECK[firstCard] === 11) {
-        newHand.hasAs -= 1
+        newPlayer.hasAs -= 1
     }
-    newHand.hand.push(card)
-    newHand.sum += DECK[card]
-    return players.splice(0, 0, newHand)
+    newPlayer.hand.push(oldPlayer.hand[1])
+    newPlayer.sum += DECK[oldPlayer.hand[1]]
+    return players.splice(oldPlayerId, 0, newPlayer)
 }
 
 prepare()
