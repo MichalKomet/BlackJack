@@ -36,8 +36,8 @@ class GameMechanics {
         this.hit()
     }
 
-    hit(defaultKey) {
-        key = defaultKey || getKey()
+    hit() {
+        key = getKey()
         if(DECK[key] === 11) {
             this.hasAs += 1
         }
@@ -60,9 +60,8 @@ class GameMechanics {
         }
     }
 
-    // Split cards on hand (to do)
     split() {
-        if(this.hand[0] === this.hand[1]) {
+        if(DECK[this.hand[0]] === DECK[this.hand[1]]) {
             splitHandler(this)
             let card = this.hand.shift()
             if(DECK[card] === 11) {
