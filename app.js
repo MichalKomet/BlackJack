@@ -37,7 +37,6 @@ class GameMechanics {
         this.hit()
     }
 
-    // Hit the card (improve by split method)
     hit() {
         key = getKey()
         if(DECK[key] === 11) {
@@ -65,8 +64,12 @@ class GameMechanics {
     // Split cards on hand (to do)
     split() {
         if(this.hand[0] === this.hand[1]) {
-            this.secondHand = this.hand.pop()
-            this.hit()
+            split(this.name, this.hand[1])
+            let card = this.hand.shift()
+            if(DECK[card] === 11) {
+                this.hasAs -= 1
+            }
+            this.sum -= DECK[card]
             this.hit()
         }
     }
@@ -176,6 +179,18 @@ function playRound() {
 
 function create(name) {
     return players.push(new Player(name))
+}
+
+function split(name, card) {
+    const newHand = new Player(name + "'s new hand")
+    let firstCard = newHand.hand.shift()
+    newHand.sum -= DECK[firstCard]
+    if(DECK[firstCard] === 11) {
+        newHand.hasAs -= 1
+    }
+    newHand.hand.push(card)
+    newHand.sum += DECK[card]
+    return players.splice(0, 0, newHand)
 }
 
 prepare()
