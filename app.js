@@ -25,8 +25,6 @@ const getKey = () => Object.keys(DECK)[
         Math.random() * Object.keys(DECK).length
     )];
 
-let i = 10000
-
 class GameMechanics {
     constructor() {
         this.sum = 0
@@ -34,14 +32,8 @@ class GameMechanics {
         this.isStand = false
         this.lose = false
         this.hand = []
-        if(i === 2) {
-            this.hit("dwojka")
-            this.hit("dwojka")
-        } else {
-            this.hit()
-            this.hit()
-        }
-        i += 1
+        this.hit()
+        this.hit()
     }
 
     hit(defaultKey) {
