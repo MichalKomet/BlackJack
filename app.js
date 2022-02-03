@@ -130,7 +130,7 @@ class Player extends GameMechanics {
     }
 }
 
-function prepare() {
+export function prepare() {
     howManyPlayers = prompt(`How many players will be in game? `)
     howManyPlayers = parseInt(howManyPlayers)
     for(let i = 0; i < howManyPlayers; i++) {
@@ -140,7 +140,7 @@ function prepare() {
     console.log("-------------------")
 }
 
-function play() {
+export function play() {
     players.forEach(el => {
         console.log(el.display())
         el.blackjack()
